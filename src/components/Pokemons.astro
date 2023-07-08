@@ -1,0 +1,32 @@
+---
+  import Pokemon from './Pokemon.astro';
+
+  interface Pokemons {
+    count: number;
+    next: string;
+    previous: null;
+    results: Result[];
+  }
+
+  interface Result {
+    name: string;
+    url: string;
+  }
+
+  interface ResultArray extends Array<Result> {}
+
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon?offset=20&limit=20");
+  const data: Pokemons = await response.json();
+  const arrayInfo = Object.values(data.results) as ResultArray;
+---
+
+<main class="w-5/8">
+  <h1 class="text-white">Hola Mundo</h1>
+  <article class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+    {
+      arrayInfo.map((data: Result) => (
+        <Pokemon data={data} />
+      ))
+    }
+  </article>
+</main>
